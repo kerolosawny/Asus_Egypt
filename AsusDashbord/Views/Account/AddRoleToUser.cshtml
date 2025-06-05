@@ -1,0 +1,31 @@
+﻿ @model UserRole
+
+
+<form asp-controller="Account" asp-action="AddRoleToUser" method="post">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="SelectedRoleName">Select Role</label>
+        <select asp-for="SelectedRoleName" class="form-control" asp-items="@(new SelectList(Model.Roles, "Name", "Name", Model.SelectedRoleName))">
+            <option value="">-- Select a Role --</option>
+        </select>
+        <span asp-validation-for="SelectedRoleName" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <button type="submit" class="form-submit btn btn-outline-primary">Submit</button>
+    </div>
+</form>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

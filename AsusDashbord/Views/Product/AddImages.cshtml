@@ -1,0 +1,70 @@
+﻿@model AddImagesDTO
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <h5 class="modal-title" id="createDiscountModalLabel">Add Product Images</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="AddImages" method="post" enctype="multipart/form-data" id="addImagesForm">
+        <div id="imageInputs">
+            @foreach (var imageUrl in Model.ExistingImages)
+            {
+                <div class="form-group d-flex justify-content-between align-items-center">
+                    <div>
+                        <label>Existing Image</label>
+                        <img src="@imageUrl" alt="Product Image" class="img-thumbnail" style="max-width: 100px;" />
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm ms-2 delete-image" data-image-url="@imageUrl" data-product-id="@Model.Id">
+                        Delete
+                    </button>
+                </div>
+            }
+
+            @if (Model.ExistingImages.Count() < 3)
+            {
+                <div class="form-group">
+                    <label for="Images">Upload Image</label>
+                    <div class="bordered-input">
+                        <input type="file" class="form-control" name="Images" multiple />
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Save Images</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".delete-image").click(function () {
+            var imageUrl = $(this).data("image-url");
+            var productId = $(this).data("product-id");
+
+            $.ajax({
+                url: '@Url.Action("DeleteImage", "Product")',
+                type: 'POST',
+                data: { imageUrl: imageUrl, productId: productId }, // Include product ID
+                success: function () {
+                    location.reload(); // Reload the page to reflect changes
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error deleting image:", error);
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    /* Set black border by default */
+    .bordered-input {
+        border: 1px solid black;
+        padding: 5px; /* Optional: adjust padding for visual appeal */
+    }
+
+</style>

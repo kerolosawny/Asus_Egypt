@@ -1,0 +1,24 @@
+﻿@model List<CategoryDTO>
+@{
+    Layout = null;
+}
+
+<div class="modal-body">
+    <form asp-action="AddSubCategories" method="post" id="addSubCategoriesForm">
+        <input type="hidden" name="ProductId" value="@ViewBag.ProductId" />  
+
+        <div class="form-group">
+            <label for="SubCategoryIds">Select Subcategories</label>
+            <select class="form-control" name="SubCategoryIds" multiple>
+                @foreach (var subCategory in Model) 
+                {
+                    <option value="@subCategory.Id">@subCategory.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Save Subcategories</button>
+        </div>
+    </form>
+</div>

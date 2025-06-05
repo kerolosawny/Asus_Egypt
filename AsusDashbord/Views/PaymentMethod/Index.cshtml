@@ -1,0 +1,165 @@
+﻿@model List<PaymentMethodsDTO>
+
+@{
+    ViewData["Title"] = "Payment Methods";
+    int x = 1;
+}
+
+
+
+@if (TempData["SuccessMessageCreate"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageCreate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageDelete"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageDelete"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageUpdate"] != null)
+{
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageUpdate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="modal fade" id="Create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalContent">
+        </div>
+    </div>
+</div>
+@* for delete*@
+<div class="modal fade" id="DeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this Payment Method?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background-color: #ced4da;" id="RoleCardIndex">
+    <div class="card-header">
+        @* <h5 class="card-title">Payment Methods</h5> *@
+        <button type="button" class="btn btn-sm btn-success" onclick="Create()">
+            <i class="bi bi-plus-circle"></i> Add Payment Method
+        </button>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-striped table-sm table-hover align-middle" id="table">
+                <thead class="sticky-top" style="background-color: #ced4da;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">PayMethod</th>
+                        <th scope="col">Expiration Date</th>
+                        <th scope="col">Is Default</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var paymentMethod in Model)
+                    {
+                        <tr>
+                            <td>@x</td>
+                            <td>@paymentMethod.Name</td>
+                            <td>@paymentMethod.Expiration_Date.ToString()</td>
+                            <td>@(paymentMethod.Is_Default ? "Yes" : "No")</td>
+                            <td>
+                               @*  @{
+                                    var cardTypeIdString = paymentMethod.Card_TypeId.ToString();
+                                    var cardTypes = ViewBag.CardTypes as Dictionary<int, string>;
+
+                                    if (int.TryParse(cardTypeIdString, out int cardTypeId))
+                                    {
+                                        var cardTypeName = cardTypes != null && cardTypes.TryGetValue(cardTypeId, out var name) ? name : "Unknown";
+                                        @cardTypeName
+                                    }
+                                    else
+                                    {
+                                        @:Unknown
+                                    }
+                                } *@
+                                <a class="btn btn-sm btn-outline-primary" onclick="Update(@paymentMethod.Id)"><i class="bi bi-gear"></i></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-danger" onclick="confirmDelete(@paymentMethod.Id)"><i class="bi bi-trash3"></i></a>
+                            </td>
+                        </tr>
+                        { x++; }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    function Create() {
+        $.ajax({
+            url: `/PaymentMethod/Create`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                 var modal = new bootstrap.Modal(document.getElementById('Create'));
+                modal.show();
+            },
+            error: function (err) {
+                console.error("Error loading modal content: ", err);
+            }
+        });
+    }
+
+    function Update(id) {
+        $.ajax({
+            url: `/PaymentMethod/Update/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                 var modal = new bootstrap.Modal(document.getElementById('Create'));
+                modal.show();
+            },
+            error: function (err) {
+                console.error("Error loading modal content: ", err);
+            }
+        });
+    }
+    function confirmDelete(id) {
+        $('#deleteForm').attr('action', `/PaymentMethod/Delete/${id}`);
+        // $('#DeleteConfirmModal').modal('show');
+        var modal = new bootstrap.Modal(document.getElementById('DeleteConfirmModal'));
+        modal.show();
+  
+    }
+
+</script>

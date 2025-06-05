@@ -1,0 +1,63 @@
+﻿@model CreatePaymentMethodsDTO
+
+@{
+    ViewData["Title"] = "Create Payment Method";
+    var cardTypes = ViewBag.CardTypes as IEnumerable<Card_TypeDTO>;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="createDiscountModalLabel">Create Payment Method</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <form asp-action="Create" method="post" id="createPaymentMethodForm">
+        <div class="mb-3">
+            <label asp-for="Card_Number" class="form-label">Card Number</label>
+            <div class="bordered-placeholder">
+            <input asp-for="Card_Number" class="form-control" required placeholder="Enter Card Number" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Expiration_Date" class="form-label">Expiration Date</label>
+                <div class="bordered-placeholder">
+            <input asp-for="Expiration_Date" class="form-control" type="date" required />
+            </div>
+            <span asp-validation-for="Expiration_Date" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <div >
+                <label asp-for="Is_Default" class="form-label"> &nbsp;&nbsp; Is Default</label>
+                <input asp-for="Is_Default" type="checkbox" />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+</form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<style>
+    /* Black border around the placeholder */
+    .bordered-placeholder {
+        border: 1px solid black;
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+</style>

@@ -1,0 +1,91 @@
+﻿@model List<OrderDTO>
+
+@{
+    int x = 1;
+}
+
+<table class="table table-sm table-hover align-middle" id="table">
+    <thead class="sticky-top" style="background-color: #ced4da;">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">User</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Order Details</th>
+            <th scope="col">Update orderState</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @if (Model != null&& Model.Count>0)
+        {
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@x</td>
+                    <td>@order.Code</td>
+                    <td>@order.UserName</td>
+                    <td>@order.TotalAmount.ToString("C")</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    @if (order.OrderState == "Pending")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-secondary">@order.OrderState</span>
+                        </td>
+                    }
+                    else if (order.OrderState == "Completed")
+                    {
+                        <td>
+                          
+                            <span class="btn btn-sm btn-success">@order.OrderState</span>
+
+                        </td>
+                    }
+                    else if (order.OrderState == "Canceled")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-danger">@order.OrderState</span>
+
+                        </td>
+                    }
+                    else if (order.OrderState == "Delivered")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-info">@order.OrderState</span>
+                        </td>
+                    }
+                    else if (order.OrderState == "Returned")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-warning">@order.OrderState</span>
+                        </td>
+                    }
+                    else if (order.OrderState == "Shipped")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-primary">@order.OrderState</span>
+                        </td>
+                    }
+                    else if (order.OrderState == "Confirmed")
+                    {
+                        <td>
+                            <span class="btn btn-sm btn-light">@order.OrderState</span>
+                        </td>
+                    }
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("OrderDetails", "Order", new { id = order.Id })">Show Details</a>
+                    </td>
+                     <td>
+                        <a class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#UserRole" onclick="UpdateorderState(@order.Id)">Update</a>
+                    </td>
+                </tr>
+                { x++; }
+            }
+        }
+        else
+        {
+            <tr><td colspan="8">Not Found.............</td></tr>
+        }
+    </tbody>
+</table>

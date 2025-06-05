@@ -1,0 +1,10 @@
+﻿ @model OrederStatusDTO
+
+
+<select asp-for="OrderStatus" class="btn  btn-outline-info w-100" title="Order State" onchange="UpdateOrderState(@Model.orderId, this.value)">
+    @if(Model.orderStat!=null)
+    @foreach (var dis in Model.orderStat)
+    {
+        <option value="@dis.Value">@dis.Key</option>
+    }
+</select>

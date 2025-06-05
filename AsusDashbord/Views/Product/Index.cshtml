@@ -1,0 +1,263 @@
+﻿@model EntityPaginated<ProductDTO>
+
+@{
+    int x = 1;
+ }
+
+@if (TempData["SuccessMessageCreate"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageCreate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageDelete"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageDelete"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageUpdate"] != null)
+{
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageUpdate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["FailMessageUpdate"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["FailMessageUpdate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+@* Modal for adding images *@
+<div class="modal fade" id="CreateDis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+</div>
+
+@* Modal for delete confirmation *@
+<div class="modal fade" id="DeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this discount?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background-color: #ced4da" id="RoleCardIndex">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <!-- Button trigger modal -->
+        @*  <button type="button" class="btn btn-sm btn-success col-1" data-bs-toggle="modal" data-bs-target="#exampleModalForUser" onclick="CreateUser()">
+        <i class="bi bi-person-plus"></i>
+        </button> *@
+        <a class="btn btn-sm btn-success col-2" asp-action="Create" style="width:auto">
+            <i class="bi bi-plus-circle"></i> Add Product
+        </a>
+        <div class="d-flex">
+            <a onclick="ResetProduct()" class="btn btn-sm btn-outline-info">Reset</a>
+            <!-- Search Input -->
+            <input type="text" id="searchInput" class="form-control form-control-sm d-inline" placeholder="Search..." />
+            <button type="button" class="btn btn-sm btn-primary" onclick="performProductSearch()" style="margin-left: 10px;">Search</button>
+        </div>
+    </div>
+    <div class="card-body" >
+        <h5 class="card-title" >All Products</h5>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;" id="Settable">
+            <table class="table table-sm table-hover align-middle" id="table">
+                <thead class="sticky-top" style="background-color: #ced4da;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Name AR</th>
+                        <th scope="col">Name EN</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Price DS</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @if (Model.Data is not null)
+                    {
+                        @foreach (var product in Model.Data)
+                        {
+                            <tr>
+                                <td>@x</td>
+                                <td>@product.Code</td>
+                                <td>@product.Name_EN</td>
+                                <td>@product.Name</td>
+                                <td>@product.Price.ToString("C" )</td>
+                                <td>
+                                    @if (product.priceAfterDiscount != null)
+                                    {
+                                        string price = product.priceAfterDiscount.HasValue ? product.priceAfterDiscount.Value.ToString("C") : string.Empty;
+                                        @price
+                                    }
+                                    
+                                </td>
+                                <td>@product.Unit_Instock</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(product.image_url))
+                                    {
+                                        <img src="@product.image_url" alt="@product.Name" style="width: 50px; height: auto;" />
+                                    }
+                                    else
+                                    {
+                                        <span>No image available</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", "Product", new { id = product.Id })"><i class="bi bi-gear"></i></a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-danger" href="#" onclick="confirmDelete(@product.Id)"><i class="bi bi-trash3"></i></a>
+                                </td>
+
+                            </tr>
+                            { x++; }
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">No Data back......</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <div>
+            <!-- Pagination buttons -->
+            @if (Model.CurrentPage > 1)
+            {
+                <a class="btn btn-sm btn-outline-light active" onclick="PreviousPPage(@Model.CurrentPage)">Previous</a>
+            }
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <a class="btn btn-sm btn-outline-light active" onclick="NextPPage(@Model.CurrentPage)">Next</a>
+            }
+        </div>
+        <div>
+            <!-- Placeholder for page info -->
+            <span>Page @Model.CurrentPage of @Model.TotalPages</span>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Function to show delete confirmation modal
+    function confirmDelete(id) {
+        $('#deleteForm').attr('action', `/Product/Delete/${id}`);
+        $('#DeleteConfirmModal').modal('show');
+    }
+
+
+    // Function to show modal for adding images
+    function AddImages(id) {
+        $.ajax({
+            url: `/Product/AddImages/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), {
+                    keyboard: false
+                });
+                modal.show();
+            }
+        });
+    }
+
+    // Function to show modal for adding specifications
+    function AddSpecs(id) {
+        $.ajax({
+            url: `/Product/AddSpecifications/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), {
+                    keyboard: false
+                });
+                modal.show();
+            }
+        });
+    }
+    function AddSubCat(id) {
+        $.ajax({
+            url: `/Product/AddSubCategories/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), {
+                    keyboard: false
+                });
+                modal.show();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred:", error); // Log any errors to the console
+            }
+        });
+    }
+    //==================================
+
+    function PreviousPPage(number) {
+        var pageNumber = number - 1;
+        window.location.href = '/Product/Index?pageNumber=' + pageNumber + '&PageSize=15';
+    }
+    //==========================
+    //************************
+    //Next Page
+    function NextPPage(number) {
+        var pageNumber = number + 1;
+        window.location.href = '/Product/Index?pageNumber=' + pageNumber + '&PageSize=15';
+    }
+</script>
+
+
+
+
+
+
+
+
+

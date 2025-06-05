@@ -1,0 +1,161 @@
+﻿@model EntityPaginated<OrderDTO>
+
+@* <h2>Orders</h2> *@
+@{
+    int x = 1;
+}
+
+<div class="card" style="background-color: #ced4da" id="RoleCardIndex">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <!-- Button trigger modal -->
+        @*  <button type="button" class="btn btn-sm btn-success col-1" data-bs-toggle="modal" data-bs-target="#exampleModalForUser" onclick="CreateUser()">
+        <i class="bi bi-person-plus"></i>
+        </button> *@
+        <a class="col-1"></a>
+        <div class="d-flex">
+            <a onclick="ResetOrder()" class="btn btn-sm btn-outline-info">Reset</a>
+            <!-- Search Input -->
+            <input type="text" id="searchInput" class="form-control form-control-sm d-inline" placeholder="Search..." />
+            <button type="button" class="btn btn-sm btn-primary" onclick="performOrderSearch()" style="margin-left: 10px;">Search</button>
+        </div>
+    </div>
+    <div class="card-body"  >
+        <h5 class="card-title" >All Orders</h5>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;" id="Settable">
+            <table class="table table-sm table-hover align-middle" id="table">
+                <thead class="sticky-top" style="background-color: #ced4da;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Total Amount</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Order Details</th>
+                        <th scope="col">Update orderState</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @if (Model.Data != null&& Model.Data.Count>0)
+                    {
+                        @foreach (var order in Model.Data)
+                        {
+                            <tr>
+                                <td>@x</td>
+                                <td>@order.Code</td>
+                                <td>@order.UserName</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.OrderDate.ToShortDateString()</td>
+                                @if (order.OrderState == "Pending")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-secondary">@order.OrderState</span>
+                                    </td>
+                                }
+                                else if (order.OrderState == "Completed")
+                                {
+                                    <td>
+
+                                        <span class="btn btn-sm btn-success">@order.OrderState</span>
+
+                                    </td>
+                                }
+                                else if (order.OrderState == "Canceled")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-danger">@order.OrderState</span>
+
+                                    </td>
+                                }
+                                else if (order.OrderState == "Delivered")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-info">@order.OrderState</span>
+                                    </td>
+                                }
+                                else if (order.OrderState == "Returned")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-warning">@order.OrderState</span>
+                                    </td>
+                                }
+                                else if (order.OrderState == "Shipped")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-primary">@order.OrderState</span>
+                                    </td>
+                                }
+                                else if (order.OrderState == "Confirmed")
+                                {
+                                    <td>
+                                        <span class="btn btn-sm btn-light">@order.OrderState</span>
+                                    </td>
+                                }
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" href="@Url.Action("OrderDetails", "Order", new { id = order.Id })">Show Details</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#UserRole" onclick="UpdateorderState(@order.Id)">Update</a>
+                                </td>
+                            </tr>
+                            { x++; }
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="8">Not Found...........</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+        <div>
+            <!-- Pagination buttons -->
+            @if (Model.CurrentPage > 1)
+            {
+                <a class="btn btn-sm btn-outline-light active" onclick="PreviousOP(@Model.CurrentPage)">Previous</a>
+            }
+            @if (Model.CurrentPage < Model.TotalPages)
+            {
+                <a class="btn btn-sm btn-outline-light active" onclick="NextOP(@Model.CurrentPage)">Next</a>
+            }
+        </div>
+        <div>
+            <!-- Placeholder for page info -->
+            <span>Page @Model.CurrentPage of @Model.TotalPages</span>
+        </div>
+    </div>
+</div>
+
+ 
+<!-- Modal for order state -->
+<div class="modal fade " id="UserRole" tabindex="-1" aria-labelledby="UserRoleLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="UserRoleLabel">Add Role To User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"  ></button>
+            </div>
+            <div class="modal-body" id="UserRoleContent">
+             
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  >Close</button>
+                @* <button type="button" class="btn btn-primary">Save changes</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+ <script>
+    function UpdateorderState(id) {
+        $.ajax({
+            url: `/Order/UpdateOrderState/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#UserRoleContent').html(res);
+            }
+        });
+    }
+ </script>

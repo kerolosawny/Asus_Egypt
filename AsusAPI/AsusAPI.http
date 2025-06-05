@@ -1,0 +1,6 @@
+@AsusAPI_HostAddress = http://localhost:5129
+
+GET {{AsusAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

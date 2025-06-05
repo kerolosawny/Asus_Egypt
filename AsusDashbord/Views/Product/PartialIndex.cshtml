@@ -1,0 +1,68 @@
+﻿@model List<ProductDTO>
+@{
+    int x = 1;
+}
+
+<table class="table table-sm table-hover align-middle" id="table">
+    <thead class="sticky-top" style="background-color: #ced4da;">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">Name AR</th>
+            <th scope="col">Name EN</th>
+            <th scope="col">Price</th>
+            <th scope="col">Price DS</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Image</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @if (Model.Count > 0)
+        {
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@x</td>
+                    <td>@product.Code</td>
+                    <td>@product.Name_EN</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td>
+                        @if (product.priceAfterDiscount != null)
+                        {
+                            string price = product.priceAfterDiscount.HasValue ? product.priceAfterDiscount.Value.ToString("C") : string.Empty;
+                            @price
+                        }
+
+                    </td>
+                    <td>@product.Unit_Instock</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(product.image_url))
+                        {
+                            <img src="@product.image_url" alt="@product.Name" style="width: 50px; height: auto;" />
+                        }
+                        else
+                        {
+                            <span>No image available</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", "Product", new { id = product.Id })"><i class="bi bi-gear"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-danger" href="#" onclick="confirmDelete(@product.Id)"><i class="bi bi-trash3"></i></a>
+                    </td>
+                </tr>
+                { x++; }
+            }
+        }
+        else
+        {
+            <tr>
+                <td>Not Found.....</td>
+            </tr>
+        }
+    </tbody>
+</table>

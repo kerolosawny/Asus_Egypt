@@ -1,0 +1,60 @@
+﻿
+@model List<IdentityRole<int>>
+
+@{
+    int x = 1;
+}
+ 
+<div class="card" style="background-color: #ced4da" id="RoleCardIndex">
+ 
+    <div class="card-body" >
+        <h5 class="card-title" >All Roles</h5>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-sm table-hover align-middle" id="table">
+                <thead class="sticky-top" style="background-color: #ced4da;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Role Name</th>
+                        <th scope="col">Normalized Name</th>
+                        @* <th scope="col">Edit</th>
+                        <th scope="col">Delete</th> *@
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">@x</th>
+                            <td>@item.Name</td>
+                            <td>@item.NormalizedName</td>
+                           @*  <td><a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="UpdateRole(@item.Id)"><i class="bi bi-gear"></i></a></td>
+                            <td><a class="btn btn-sm btn-outline-danger" onclick="DeleteRole(@item.Id)"><i class="bi bi-trash3"></i></a></td>
+                         *@</tr>
+                        { x++; }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for create -->
+ 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">For Role</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="CreatContent">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                @* <button type="button" class="btn btn-primary">Save changes</button> *@
+            </div>
+        </div>
+    </div>
+</div>

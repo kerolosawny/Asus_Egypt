@@ -1,0 +1,51 @@
+﻿@model AddSpecsDTO
+@{
+    Layout = null;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="createDiscountModalLabel">Add Product Specifications</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="AddSpecifications" method="post">
+        @if (Model.ProductSpecifications != null && Model.ProductSpecifications.Any())
+        {
+            for (int i = 0; i < Model.ProductSpecifications.Count; i++)
+            {
+                var spec = Model.ProductSpecifications[i];
+
+                <div class="form-group">
+                    <label>@spec.Name</label>
+                    <div class="bordered-placeholder">
+                        <input class="form-control transparent-input"
+                               asp-for="ProductSpecifications[i].Value"
+                               placeholder="Enter value for @spec.Name" value="@spec.Value"/>
+                    </div>
+                    <input type="hidden" asp-for="ProductSpecifications[i].SpecificationKeyId"/>
+                    <input type="hidden" asp-for="ProductSpecifications[i].Name" value="@spec.Name" />
+
+                </div>
+            }
+        }
+        else
+        {
+            <p>No specifications available for this product category.</p>
+        }
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Save Specifications</button>
+        </div>
+        
+    </form>
+</div>
+
+<style>
+    /* Black border around the placeholder */
+    .bordered-placeholder {
+        border: 1px solid black;
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+</style>

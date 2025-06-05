@@ -1,0 +1,138 @@
+﻿@model OrderDTO
+
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<div class="container mt-4">
+    @*<h3 class="mb-4">Order Details</h3>*@
+
+    <!-- Order Summary Card -->
+    <div class="card shadow-lg mb-4">
+        <div class="card-header text-white bg-primary">
+            <h5 class="mb-0">Order Details</h5>
+        </div>
+        <div class="card-body">
+            <!-- First row: Order ID and Total Amount -->
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Order Code:</strong>
+                        <span class="h5">@Model.Code</span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Date:</strong>
+                        <span> @Model.OrderDate.ToString("d MMM yyyy hh:mm:ss tt")</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Second row: Order State and Shipping Method -->
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Order State:</strong>
+                        <span class=" @GetOrderStateBadgeClass(Model.OrderState)">@Model.OrderState</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Shipping Method:</strong>
+                        <span> @Model.ShippingMethod</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third row: Payment Method and Tracking Number -->
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Payment Method:</strong>
+                        <span> @Model.PaymentMethod</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Tracking Number:</strong>
+                        <span> @Model.TrackingNumber</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fourth row: Shipping Address -->
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Shipping Address:</strong>
+                        <span> @Model.ShippingAddress</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="border p-3 rounded">
+                        <strong>Total Amount:</strong>
+                        <span class="h5 text-success">@Model.TotalAmount.ToString("C")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Order Items Table -->
+    <div class="card shadow-lg">
+        <div class="card-header text-white bg-primary">
+            <h5 class="mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;" id="Settable">
+
+                <table class="table table-bordered table-sm table-hover align-middle table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Tax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Price.ToString("C")</td>
+                                <td>@item.Tax.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Order")" class="btn btn-primary custom-button">Back to Orders</a>
+    </div>
+</div>
+
+@functions {
+    // Utility function to get badge class for order state
+    private string GetOrderStateBadgeClass(string orderState)
+    {
+        return orderState switch
+        {
+            "Pending" => "badge-warning text-dark",
+            "Completed" => "badge-success",
+            "Canceled" => "badge-danger",
+            "Delivered" => "badge-info text-dark",
+            _ => "badge-secondary"
+        };
+    }
+}

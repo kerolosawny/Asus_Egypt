@@ -1,0 +1,94 @@
+﻿@model UpdateDiscountDTO
+
+<div class="modal-header">
+    <h5 class="modal-title" id="createDiscountModalLabel">Update Discount</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="UpdateDiscount" method="post" id="createDiscountForm" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input asp-for="Id" class="form-control" hidden />
+        </div>
+        <div class="row">
+            <div class="mb-3 col">
+                <label asp-for="Name" class="form-label"></label>
+                <div class="bordered-placeholder">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 col">
+                <label asp-for="Name_EN" class="form-label"></label>
+                <div class="bordered-placeholder">
+                    <input asp-for="Name_EN" class="form-control" />
+                </div>
+                <span asp-validation-for="Name_EN" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="mb-3 col">
+                <label asp-for="Start_date" class="form-label"></label>
+                <div class="bordered-placeholder">
+                    <input asp-for="Start_date" class="form-control" type="date" required />
+                </div>
+                <span asp-validation-for="Start_date" class="text-danger"></span>
+            </div>
+            <div class="mb-3 col">
+                <label asp-for="End_date" class="form-label"></label>
+                <div class="bordered-placeholder">
+                    <input asp-for="End_date" class="form-control" type="date" required />
+                </div>
+                <span asp-validation-for="End_date" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="mb-3 col">
+                <label asp-for="Percentage" class="form-label"></label>
+                <div class="bordered-placeholder">
+                    <input asp-for="Percentage" class="form-control" type="number" />
+                </div>
+                <span asp-validation-for="Percentage" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-group col" style="margin-top: 10px;">
+                <label asp-for="ImageData">Discount Image</label>
+                <input asp-for="ImageData" type="file" class="form-control" />
+                <span asp-validation-for="ImageData" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="">
+                <label asp-for="IsActive" class="form-label">&nbsp;&nbsp;Active</label>
+                <input asp-for="IsActive" type="checkbox" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update Discount</button>
+        </div>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    /* Black border around the placeholder */
+    .bordered-placeholder {
+        border: 1px solid black;
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+</style>

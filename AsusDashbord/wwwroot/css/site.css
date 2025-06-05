@@ -1,0 +1,71 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.card-custom-font {
+    font-family: Arial, sans-serif;
+}
+
+.custom-button {
+    padding: 10px 20px; /* Increase padding for a larger button */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Make text bold */
+    text-transform: uppercase; /* Uppercase text for better visibility */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition effects */
+}
+
+    /* Hover effects */
+    .custom-button:hover {
+        transform: translateY(-2px); /* Slight lift effect */
+    }
+
+    /* Active state for buttons */
+    .custom-button:active {
+        transform: translateY(1px); /* Slight press effect */
+    }
+
+/* Add specific styles for primary button */
+.btn-primary.custom-button {
+    background-color: #007bff; /* Customize primary button color */
+    border: none; /* Remove default border */
+}
+
+    .btn-primary.custom-button:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+    }
+
+/* Add specific styles for secondary button */
+.btn-secondary.custom-button {
+    background-color: #6c757d; /* Customize secondary button color */
+    border: none; /* Remove default border */
+}
+
+    .btn-secondary.custom-button:hover {
+        background-color: #5a6268; /* Darker shade on hover */
+    }
+.custom-title {
+    font-size: 2rem; /* Adjust size as needed */
+    font-weight: bold; /* Make it bold */
+    color: #343a40; /* Customize color */
+    margin-bottom: 1rem; /* Add space below the title */
+}
+ 

@@ -1,0 +1,64 @@
+﻿@model CreateSpecificationKeyDTO
+ 
+<div class="modal-header">
+    <h5 class="modal-title" id="createDiscountModalLabel">Create Discount</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+
+<form asp-action="Create">
+    <div class="mb-3">
+        <label for="Key" class="form-label">Specification Key</label>
+            <div class="bordered-placeholder">
+        <input type="text" class="form-control" id="Key" name="Key" asp-for="Key" placeholder="Enter Key En" />
+            </div>
+        <span asp-validation-for="Key" class="text-danger"></span>
+    </div> 
+    <div class="mb-3">
+        <label for="Key_Ar" class="form-label">Specification Key Arabic</label>
+            <div class="bordered-placeholder">
+        <input type="text" class="form-control"   asp-for="Key_Ar" placeholder="Enter key Ar"/>
+        </div>
+            <span asp-validation-for="Key_Ar" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="SubCategoryId" class="form-label">Subcategory</label>
+        <select class="form-control" id="SubCategoryId" name="SubCategoryId" asp-for="SubCategoryId">
+            <option value="">-- Select Subcategory --</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Name_EN</option>
+            }
+        </select>
+        <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@* 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+ *@
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<style>
+    /* Black border around the placeholder */
+    .bordered-placeholder {
+        border: 1px solid black;
+        padding: 3px;
+        border-radius: 3px;
+    }
+
+</style>

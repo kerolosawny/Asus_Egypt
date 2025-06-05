@@ -1,0 +1,80 @@
+﻿@model LoginDTO
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up To Asus Dashboard Admin</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="~/fonts/material-icon/css/material-design-iconic-font.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="~/css/styles.css" />
+</head>
+<body>
+
+    <div class="main">
+        <section class="signup">
+            <div class="container">
+                <div class="signup-content">
+
+                    <form asp-action="Login" method="post">
+                        <h2 class="form-title">Login</h2>
+
+                        <div class="form-group">
+                            <input asp-for="UserNameOrEmail" class="form-input" placeholder="Enter Your Email Or User Name" />
+                            <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                            </div>
+
+                        <div class="form-group">
+                            <input asp-for="Password" class="form-input" type="password" class="form-control" placeholder="Enter Password"/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        @if(Model!=null)
+                        @if (Model.Result != null)
+                        {
+                            <label class="text-danger">@Model.Result</label>
+                        }
+                        <div class="form-group">
+                            <input type="checkbox" asp-for="RememberMe" id="rememberMe" />
+                            @* <label for="rememberMe" class="form-label">Remember Me</label> *@
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="form-submit">Login</button>
+                        </div>
+                    </form>
+                    <p class="loginhere">
+                        sign up ?
+                        <a asp-action="Register" class="loginhere-link">sign-up here</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
+    <!-- JS -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/js/main.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+@* @section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+} *@

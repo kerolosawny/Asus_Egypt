@@ -1,0 +1,265 @@
+﻿@model UpdateProductDTO
+
+
+<!-- Modal for Adding Items -->
+<div class="modal fade" id="CreateDis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+</div>
+
+<!-- Edit Form -->
+<div class="card shadow-sm mb-4 card-custom-font bg-primary" style="background-color: #ced4da" >
+    <div class="card-header ">
+        <h5 class="card-title custom-title mb-0 text-white">Edit Product</h5>
+    </div>
+        <form asp-action="Edit" enctype="multipart/form-data" class="p-1"> 
+            <div class="card-body bg-light">
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Name and Description Fields -->
+                <div class="row mb-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Name">Arabic Name</label>
+                            <div class="bordered-input">
+                                <input asp-for="Name" class="form-control" />
+                            </div>
+                            @* <small class="form-text text-muted">Arabic</small> *@
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Name_EN">English Name</label>
+                            <div class="bordered-input">
+                                <input asp-for="Name_EN" class="form-control" />
+                                @*<small class="form-text text-muted">English</small>*@
+                                <span asp-validation-for="Name_EN" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Price">Price</label>
+                            <div class="bordered-input">
+                                <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <br />
+                <!-- Category, Stock and Discount -->
+                <div class="row mb-6">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="CategoryId">Category</label>
+                            <select id="CategoryId" asp-for="CategoryId" class="form-control">
+                                <option value="">Select Category</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    <option value="@category.Id">@category.Name_EN</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Unit_Instock">Units In Stock</label>
+                            <div class="bordered-input">
+                                <input asp-for="Unit_Instock" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Unit_Instock" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="DiscountId">Discounts</label>
+                        <select asp-for="Discounts" class="form-control" title="Discounts" style="max-height: 44px;">
+                                @* <option value="">Select Discounts</option> *@
+                                @foreach (var dis in ViewBag.Discounts)
+                                {
+                                    <option value="@dis.Id">@dis.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <br />
+
+                <!-- Description and discounts-->
+                <div class="row mb-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Description">Arabic Description</label>
+                            <textarea asp-for="Description" class="form-control"></textarea>
+                            @* <small class="form-text text-muted">Arabic</small> *@
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="Description_EN">English Description</label>
+                            <textarea asp-for="Description_EN" class="form-control"></textarea>
+                            @* <small class="form-text text-muted">English</small> *@
+                            <span asp-validation-for="Description_EN" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+
+                    @* <div class="row align-items-center"> *@
+
+                    <div class="col-md-3">
+                        <label for="Images">Product Main Image</label>
+                        <input asp-for="ImageD" type="file" class="form-control" title="Product Image" />
+                        <small class="form-text text-muted">Upload product images</small>
+                    </div>
+                    @* <div class="col-md-6 text-center"> *@
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Url.Content(Model.Image)" alt="Current Image" style="max-width: 100px; max-height: 100px;" class="img-thumbnail" />
+                    }
+                    @* </div> *@
+                    @* </div> *@
+                </div>
+
+                <br />
+
+
+            <!-- Active Status style="width: 451px; height: 35px; background-color:white"-->
+                <div class="row mb-6">
+                    <div class="col-md-4">
+                        <div  >
+
+                            <label for="Is_Active" class="form-check-label">&nbsp; Is Active For Image Slider &nbsp;&nbsp;</label>
+                            <span asp-validation-for="Is_Active" class="text-danger"></span>
+                            <input asp-for="Is_Active" type="checkbox" class="form-check-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Additional Actions -->
+                <div class="text-center my-4">
+                    <a class="btn btn-sm btn-outline-primary mx-2" href="#" onclick="AddImages(@Model.Id)">
+                        <i class="bi bi-images"></i> Add Images
+                    </a>
+                    <a class="btn btn-sm btn-outline-primary mx-2" href="#" onclick="AddSpecs(@Model.Id)">
+                        <i data-feather="cpu"></i> Add Specs
+                    </a>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-flex justify-content-center my-3">
+                    <button type="submit" class="btn btn-primary custom-button me-2">Update Product</button>
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-secondary custom-button">Back to List</a>
+                </div>
+
+            </div>
+    </form>
+
+</div>
+
+
+
+
+
+
+<!-- Scripts -->
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#CategoryId').change(function () {
+            var categoryId = $(this).val();
+            $('#SubCategoryId').empty().append('<option value="">Select SubCategory</option>');
+
+            if (categoryId) {
+                $.getJSON('/Product/GetSubCategories/' + categoryId, function (data) {
+                    $.each(data, function (index, subCategory) {
+                        $('#SubCategoryId').append('<option value="' + subCategory.Id + '">' + subCategory.Name + '</option>');
+                    });
+                });
+            }
+        });
+    });
+
+    // Functions for modal popups
+    function AddImages(id) {
+        $.ajax({
+            url: `/Product/AddImages/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), { keyboard: false });
+                modal.show();
+            }
+        });
+    }
+
+    function AddSpecs(id) {
+        $.ajax({
+            url: `/Product/AddSpecifications/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), { keyboard: false });
+                modal.show();
+            }
+        });
+    }
+
+    function AddSubCat(id) {
+        $.ajax({
+            url: `/Product/AddSubCategories/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'), { keyboard: false });
+                modal.show();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred:", error);
+            }
+        });
+    }
+</script>
+
+<style>
+
+    .form-control {
+        border: 1px solid grey;
+    }
+
+    .bordered-input {
+        border: 1px solid grey;
+        border-radius: 3px;
+    }
+</style>

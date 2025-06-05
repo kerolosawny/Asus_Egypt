@@ -1,0 +1,143 @@
+﻿@model List<SpecificationKeyDTO>
+@{
+    int x = 1;
+}
+
+
+
+<div class="modal fade" id="CreateDis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modalContent">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this Specification Key?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessageCreate"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageCreate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageDelete"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageDelete"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["SuccessMessageUpdate"] != null)
+{
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessageUpdate"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card" style="background-color: #ced4da" id="RoleCardIndex">
+    <div class="card-header">
+        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#CreateSpecKey" onclick="CreateSpecKey()">
+            <i class="bi bi-plus-circle"></i> Create Specification Key
+        </button>
+    </div>
+    <div class="card-body"  >
+        <h5 class="card-title" >All Specification Keys</h5>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-sm table-hover align-middle" id="table">
+                <thead class="sticky-top" style="background-color: #ced4da;">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Key</th>
+                        <th scope="col">Sub Category Name </th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var specKey in Model)
+                    {
+                        <tr>
+                            <th scope="row">@x</th>
+                            <td>@specKey.Key</td>
+                            <td>@(specKey.SubCategoryName ?? "N/A")</td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" onclick="UpdateSpecKey(@specKey.Id)"><i class="bi bi-gear"></i></a>
+                                <a class="btn btn-sm btn-outline-danger" onclick="confirmDelete(@specKey.Id)"><i class="bi bi-trash3"></i></a>
+                            </td>
+                        </tr>
+                        { x++; }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+
+    function CreateSpecKey() {
+        $.ajax({
+            url: `/SpecificationKey/Create`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+                //$('#CreateDis').modal('show');
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'));
+                modal.show();
+            },
+            error: function (err) {
+                console.error("Error loading modal content: ", err);
+            }
+        });
+    }
+
+    function UpdateSpecKey(id) {
+        $.ajax({
+            url: `/SpecificationKey/Update/${id}`,
+            type: 'GET',
+            success: function (res) {
+                $('#modalContent').html(res);
+              //  $('#CreateDis').modal('show');
+                var modal = new bootstrap.Modal(document.getElementById('CreateDis'));
+                modal.show();
+            },
+            error: function (err) {
+                console.error("Error loading modal content: ", err);
+            }
+        });
+    }
+
+    function confirmDelete(Id) {
+        $('#deleteForm').attr('action', `/SpecificationKey/Delete/${Id}`);
+     //   $('#DeleteConfirmModal').modal('show');
+        var modal = new bootstrap.Modal(document.getElementById('DeleteConfirmModal'));
+        modal.show();
+    }
+</script>

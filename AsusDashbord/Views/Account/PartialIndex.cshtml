@@ -1,0 +1,42 @@
+﻿@model List<UserDTO>
+@{
+    int x = 1;
+}
+
+<table class="table table-sm table-hover align-middle" id="table">
+    <thead class="sticky-top" style="background-color: #ced4da;">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Role</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Add Role</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @if (Model.Count > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@x</th>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Roles</td>
+                    <td><a class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModalForUser" onclick="UpdateUser(@item.Id)"><i class="bi bi-gear"></i></a></td>
+                    <td><a class="btn btn-sm btn-outline-danger" onclick="DeleteUser(@item.Id)"><i class="bi bi-trash3"></i></a></td>
+                    <td><a class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#UserRole" onclick="AddRoleToUser(@item.Id)"> <i class="bi bi-plus-circle"></i></a></td>
+                </tr>
+                { x++; }
+            }
+        }
+        else
+        {
+            <tr>
+                <td>Not Found.....</td>
+            </tr>
+        }
+    </tbody>
+</table>
